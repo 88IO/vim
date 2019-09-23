@@ -1,0 +1,168 @@
+[[plugins]]
+repo = 'Shougo/neocomplete.vim'
+on_i = 1
+hook_on_source = '''
+    let g:neocomplete#enable_at_startup = 1
+    let g:neocomplete#enable_auto_select = 0
+    let g:neocomplete#use_vimproc = 1
+    ley g:neocomplete#force_overwrite_omnifunc = 1
+    if !exists('g:neocomplete#sources#omni#input_patterns')
+        let g:neocomplete#sources#omni#input_patterns = {}
+    endif
+    let g:neocomplete#sources#omni#input_patterns.python =
+      \ '\h\w*\|[^. \t]\.\w*'
+    let g:neocomplete#sources#omni#input_patterns.c =
+      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+    let g:neocomplete#sources#omni#input_patterns.cpp =
+      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+    let g:neocomplete#sources#omni#input_patterns.tex =
+      \ g:vimtex#re#neocomplete
+    let g:neocomplete#sources#omni#input_patterns.rust =
+      \ '[^.[:digit:] *\t]\%(\.\|\::\)\%(\h\w*\)\?'
+'''
+
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+on_i = 1
+
+[[plugins]]
+repo = 'mattn/emmet-vim'
+on_ft = ['html']
+
+[[plugins]]
+repo = 'Shougo/unite.vim'
+on_cmd = ['Unite']
+
+[[plugins]]
+repo = 'Shougo/neomru.vim'
+on_source = ['Shougo/unite.vim']
+
+[[plugins]]
+repo = 'Shougo/vimfiler'
+depends = ['unite.vim']
+on_cmd = ['VimFilerTab', 'VimFiler', 'VimFilerExplorer']
+hook_add = '''
+    let g:vimfiler_as_default_explorer = 1
+    let g:vimfiler_safe_mode_by_default = 0
+    nnoremap <silent> <Leader>f :<C-u>VimFilerExplorer -split -simple -winwidth=25 -toggle -no-quit<CR>
+'''
+
+[[plugins]]
+repo = 'sjl/gundo.vim'
+on_cmd = ['GundoToggle']
+
+#Python
+[[plugins]]
+repo = 'jmcantrell/vim-virtualenv'
+on_ft = ['python', 'python3', 'djangohmtl']
+
+[[plugins]]
+repo = 'davidhalter/jedi-vim'
+on_ft = ['python', 'python3', 'djangohtml']
+hook_add = '''
+    autocmd FileType python setlocal omnifunc=jedi#completions
+    autocmd FileType python setlocal completeopt-=preview
+    let g:jedi#completions_enabled = 1
+    let g:jedi#auto_vim_configuration = 0
+    let g:jedi#force_py_version = 3
+    let g:jedi#completions_command = "<C-n>"
+    let g:jedi#use_tabs_not_buffers = 1
+    let g:jedi#popup_select_first = 0
+    let g:jedi#popup_on_dot = 0
+    let g:jedi#goto_command = "<leader>d"
+    let g:jedi#goto_assignments_command = "<leader>g"
+    let g:jedi#goto_definitions_command = ""
+    let g:jedi#documentation_command = "K"
+    let g:jedi#usages_command = "<leader>n"
+    let g:jedi#rename_command = "<leader>R"
+'''
+
+[[plugins]]
+repo = 'tell-k/vim-autopep8'
+on_ft = ['python', 'python3', 'djangohtml']
+hook_source = '''
+    function! Preserve(command)
+        let search = @/
+        let cursor_position = getpos('.')
+        normal! H
+        let window_position = getpos('.')
+        call setpos('.', cursor_position)
+        execute a:command
+        let @/ = search
+        call setpos('.', window_position)
+        normal! zt
+        call setpos('.', cursor_position)
+    endfunction
+
+    function! Autopep8()
+        call Preserve(':silent %!autopep8 -')
+    endfunction
+
+    nnoremap <S-f> :call Autopep8()<CR>
+'''
+
+#C, C++
+[[plugins]]
+repo = 'justmao945/vim-clang'
+on_ft = ['c', 'cpp']
+hook_add = '''
+    let g:clang_auto = 0
+    let g:clang_complete_auto = 0
+    let g:clang_auto_select = 0
+    let g:clang_use_library = 1
+    let g:clang_c_completeopt = 'menuone'
+    let g:clang_cpp_completeopt = 'menuone'
+    let g:clang_exec = 'clang'
+    let g:clang_c_options = '-std=c11'
+    let g:clang_cpp_options = '-std=c++11'
+'''
+
+#Rust
+[[plugins]]
+repo = 'rust-lang/rust.vim'
+on_ft = ['rust']
+hook_source = '''
+    nnoremap <S-f> :RustFmt<CR>
+'''
+
+[[plugins]]
+repo = 'racer-rust/vim-racer'
+on_ft = ['rust']
+hook_source = '''
+    autocmd FileType rust setlocal completeopt-=preview
+    let g:racer_cmd = "$HOME/.cargo/bin/racer"
+    let g:racer_experimental_completer = 1
+'''
+
+#JavaScript
+[[plugins]]
+repo = 'billyvg/tigris.nvim'
+on_ft = ['javascript', 'javascript.jsx']
+
+#Toml
+[[plugins]]
+repo = 'cespare/vim-toml'
+on_ft = ['toml']
+
+#Tex
+[[plugins]]
+repo = "lervag/vimtex"
+on_ft = ["tex"]
+
+#Kotlin
+#[[plugins]]
+#repo = 'udalov/kotlin-vim'
+#on_ft = ['kotlin']
+
+#Scala
+#[[plugins]]
+#repo = 'derekwyatt/vim-scala'
+#on_ft = ['scala']
+
+#Java
+[[plugins]]
+repo = 'artur-shaik/vim-javacomplete2'
+on_ft = ["java"]
+hook_add = '''
+    autocmd FileType java setlocal omnifunc=javacomplete#Complete
+'''
